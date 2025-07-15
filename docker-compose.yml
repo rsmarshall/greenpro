@@ -1,0 +1,8 @@
+services:
+  app:
+    build: .
+    image: node22-app
+    container_name: node22-app
+    volumes:
+      - .:/app
+    command: npm start
