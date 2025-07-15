@@ -2,8 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 export interface House {
-  id?: string;
-  submissionId?: string;
+  submissionId: string;
   floorArea: number;
   heatingFactor: number;
   insulationFactor: number;

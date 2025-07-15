@@ -1,4 +1,14 @@
-# Node.js 22 Base Application with Docker
+# Evergreen tech test application for Greenpro
+
+This is currently a base node 22 application under development for the Greenpro test test
+
+Developement steps/thoughts
+
+Base application in place
+Converted to TypeScript
+Basic docker setup
+Reading of house data implemented
+Heat loss calculator in place currently in index
 
 ## Requirements
 - [Docker](https://www.docker.com/get-started)
