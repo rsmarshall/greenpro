@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import { readHouses, calculateHeatLoss, calculatePowerHeatLoss } from './lib/heatLoss';
+import { findMatchingPackage, getTotalCost } from './lib/matchHeatPump';
 
 const houses = readHouses('./data/houses.json');
 
@@ -14,6 +15,14 @@ const houses = readHouses('./data/houses.json');
       const powerHeatLoss = await calculatePowerHeatLoss(house);
       console.log(`  Design Region = ${house.designRegion}`);
       console.log(`  Power Heat Loss = ${powerHeatLoss.toFixed(2)} kW`);
+      const match = findMatchingPackage(powerHeatLoss);
+      if (match) {
+        console.log('  Cost Breakdown');
+        match.costs.forEach(item => {
+          console.log(`    ${item.label}, £${item.cost}`);
+        });
+        console.log(`  Total Cost = £${getTotalCost(match)}`);
+      }
     } catch (err) {
       if ((err as Error).message.includes('design region')) {
         console.log('  Warning: Could not find design region');
