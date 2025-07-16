@@ -21,7 +21,7 @@ npm start
 
 ### Run with Docker Compose
 ```sh
-docker-compose up --build
+docker compose up --build
 ```
 
 ### Tests
