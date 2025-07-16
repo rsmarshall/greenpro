@@ -29,10 +29,9 @@ const houses = readHouses('./data/houses.json');
       } else {
         console.log(`  Warning: ${(err as Error).message}`);
       }
-      // Skip further output for this house
       console.log();
       continue;
     }
-    console.log(); // Add a blank line between each house
+    console.log();
   }
 })();

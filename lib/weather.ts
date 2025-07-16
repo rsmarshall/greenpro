@@ -14,7 +14,7 @@ export async function getWeather(location: string): Promise<any> {
       },
     }, (res) => {
       if (res.statusCode === 404) {
-        res.resume(); // Ensure the response is fully consumed
+        res.resume();
         resolve({ error: 'Could not find design region' });
         return;
       }
@@ -29,7 +29,7 @@ export async function getWeather(location: string): Promise<any> {
         }
       });
       res.on('error', (err) => {
-        res.resume(); // Ensure the response is fully consumed on error
+        res.resume();
         reject(err);
       });
     });
