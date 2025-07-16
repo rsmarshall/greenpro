@@ -1,6 +1,9 @@
-import { calculateHeatLoss, readHouses, House } from './heatLoss';
+import { calculateHeatLoss, calculatePowerHeatLoss, readHouses, House } from './heatLoss';
+import * as weather from './weather';
 import fs from 'fs';
 import path from 'path';
+
+jest.mock('./weather');
 
 describe('calculateHeatLoss', () => {
   it('calculates heat loss correctly for valid input', () => {
@@ -45,5 +48,52 @@ describe('readHouses', () => {
     fs.writeFileSync(badFile, 'not json');
     expect(() => readHouses(badFile)).toThrow();
     fs.unlinkSync(badFile);
+  });
+});
+
+describe('calculatePowerHeatLoss', () => {
+  beforeAll(() => {
+    (weather.getDegreeDays as unknown as jest.Mock).mockImplementation(async (location: string) => {
+      if (location === 'Borders (Boulmer)') return 2483;
+      if (location === 'NoRegion') throw new Error('Warning: Could not find design region');
+      return 1000;
+    });
+  });
+
+  afterAll(() => {
+    jest.restoreAllMocks();
+  });
+
+  it('calculates power heat loss correctly for valid input', async () => {
+    const house: House = {
+      submissionId: 'test-house',
+      floorArea: 100,
+      heatingFactor: 2,
+      insulationFactor: 1.5,
+      designRegion: 'Borders (Boulmer)'
+    };
+    const result = await calculatePowerHeatLoss(house);
+    expect(result).toBeCloseTo(300 / 2483, 5);
+  });
+
+  it('throws error if designRegion is missing', async () => {
+    const house: House = {
+      submissionId: 'test-house',
+      floorArea: 100,
+      heatingFactor: 2,
+      insulationFactor: 1.5
+    };
+    await expect(calculatePowerHeatLoss(house)).rejects.toThrow('House is missing designRegion for degree days lookup');
+  });
+
+  it('throws error if degree days not found', async () => {
+    const house: House = {
+      submissionId: 'test-house',
+      floorArea: 100,
+      heatingFactor: 2,
+      insulationFactor: 1.5,
+      designRegion: 'NoRegion'
+    };
+    await expect(calculatePowerHeatLoss(house)).rejects.toThrow('Warning: Could not find design region');
   });
 });
