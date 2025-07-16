@@ -28,10 +28,19 @@ describe('getTotalCost', () => {
   const testFile = path.join(__dirname, '../data/heat-pumps.json');
   const packages = JSON.parse(fs.readFileSync(testFile, 'utf-8'));
 
-  it('calculates the total cost of a package', () => {
+  it('calculates the total cost of a package including VAT', () => {
     const pkg = packages[0];
+    const subtotal = pkg.costs.reduce((sum: number, item: any) => sum + item.cost, 0);
+    const expected = subtotal * 1.2;
     const total = getTotalCost(pkg);
-    const expected = pkg.costs.reduce((sum: number, item: any) => sum + item.cost, 0);
-    expect(total).toBe(expected);
+    expect(total).toBeCloseTo(expected, 2);
+  });
+
+  it('calculates the total cost of a package with custom VAT', () => {
+    const pkg = packages[0];
+    const subtotal = pkg.costs.reduce((sum: number, item: any) => sum + item.cost, 0);
+    const expected = subtotal * 1.05;
+    const total = getTotalCost(pkg, 0.05);
+    expect(total).toBeCloseTo(expected, 2);
   });
 });

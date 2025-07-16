@@ -19,6 +19,7 @@ export function findMatchingPackage(powerHeatLoss: number, heatPumpsFile = './da
   return suitable[0];
 }
 
-export function getTotalCost(pkg: HeatPumpPackage): number {
-  return pkg.costs.reduce((sum, item) => sum + item.cost, 0);
+export function getTotalCost(pkg: HeatPumpPackage, vatRate = 0.2): number {
+  const subtotal = pkg.costs.reduce((sum, item) => sum + item.cost, 0);
+  return subtotal * (1 + vatRate);
 }

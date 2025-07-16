@@ -21,7 +21,7 @@ const houses = readHouses('./data/houses.json');
         match.costs.forEach(item => {
           console.log(`    ${item.label}, £${item.cost}`);
         });
-        console.log(`  Total Cost = £${getTotalCost(match)}`);
+        console.log(`  Total Cost, including VAT = £${getTotalCost(match)}`);
       }
     } catch (err) {
       if ((err as Error).message.includes('design region')) {
