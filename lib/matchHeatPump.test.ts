@@ -31,16 +31,16 @@ describe('getTotalCost', () => {
   it('calculates the total cost of a package including VAT', () => {
     const pkg = packages[0];
     const subtotal = pkg.costs.reduce((sum: number, item: any) => sum + item.cost, 0);
-    const expected = subtotal * 1.2;
+    const expected = (subtotal * 1.2).toFixed(2);
     const total = getTotalCost(pkg);
-    expect(total).toBeCloseTo(expected, 2);
+    expect(total).toBe(expected);
   });
 
   it('calculates the total cost of a package with custom VAT', () => {
     const pkg = packages[0];
     const subtotal = pkg.costs.reduce((sum: number, item: any) => sum + item.cost, 0);
-    const expected = subtotal * 1.05;
+    const expected = (subtotal * 1.05).toFixed(2);
     const total = getTotalCost(pkg, 0.05);
-    expect(total).toBeCloseTo(expected, 2);
+    expect(total).toBe(expected);
   });
 });
